@@ -59,6 +59,8 @@ export default {
         let flag = false
         if (item.os === 'darwin') {
           (item.type !== 'audio') ? flag = true : flag = false
+        } else {
+          (item.type !== 'audio') ? flag = true : flag = false
         }
         if (flag === true) {
           this.cameras.push(item)
