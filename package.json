@@ -57,6 +57,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "ffdevices": "^0.1.1",
+    "ffmpeg": "0.0.4",
     "ffmpeg-static": "^2.4.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

@@ -16,9 +16,13 @@
                 <button id="open-file-demo-toggle" class="js-container-target demo-toggle-button" style="display:inline;">Camera
                     <div class="demo-meta u-avoid-clicks">Information: <span class="demo-meta-divider">선택 없음</span> </div>
                 </button>
-                <div class="value">{{ CameraName }}</div>
+                <select v-model="selectCamera">
+                  <option v-for="option in cameras" v-bind:value="option.value" v-bind:key="option.name">
+                    {{option.name}}
+                  </option>
+                </select>
             <span class="demo-controls" style="float: right !important; margin-top: 15px;">
-                <button class="demo-button" id="select-camera">선택</button>
+                <button class="demo-button" id="select-camera" v-on:click="clickme">선택</button>
             </span>
             </div>
         </div>
@@ -26,36 +30,44 @@
 </template>
 
 <script>
-// const ffmpeg = require('ffmpeg-static')
-const ffdevices = require('ffdevices')
-ffdevices.getAll(function (error, devices) {
-  if (!error) {
-    addCameralist(devices)
-  } else {
-    console.log('getFfmpegDevices > error :', error)
-  }
-})
-// const selectCamera
-function addCameralist (devices) {
-  devices.forEach((item) => {
-    let flag = false
-    if (item.os === 'darwin') {
-      // let IsCam = true
-      flag = (item.type !== 'audio') ? 1 : 0
-    }
-    if (flag) {
-      console.log(item.name)
-      // option.text = item.name
-      // option.value = item.value
-      // selectCamera.add(option)
-    }
-  })
-}
 export default {
   data () {
     return {
-      // CameraName: item.name
+      selectCamera: '',
+      cameras: []
     }
+  },
+  methods: {
+    clickme () {
+      alert(this.selectCamera)
+    },
+    getDevices () {
+      let self = this
+      const ffdevices = require('ffdevices')
+      ffdevices.getAll(function (error, devices) {
+        if (!error) {
+          self.addCameralist(devices)
+        } else {
+          console.log('getFfmpegDevices > error :', error)
+        }
+      })
+    },
+    addCameralist (devices) {
+      console.log('devices> :', devices)
+      this.selectCamera = devices[0].name
+      devices.forEach((item) => {
+        let flag = false
+        if (item.os === 'darwin') {
+          (item.type !== 'audio') ? flag = true : flag = false
+        }
+        if (flag === true) {
+          this.cameras.push(item)
+        }
+      })
+    }
+  },
+  mounted () {
+    this.getDevices()
   }
 }
 </script>
